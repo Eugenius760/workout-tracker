@@ -8,7 +8,8 @@ const db = require("../models/index");
 // });
 
 router.post("/api/workouts", ({ body }, res) => {
-  db.create(body)
+  db.workout
+    .create(body)
     .then((dbWorkout) => {
       res.json(dbWorkout);
     })
@@ -18,16 +19,26 @@ router.post("/api/workouts", ({ body }, res) => {
 });
 
 router.post("/api/workouts/bulk", ({ body }, res) => {
-    db.insertMany(body)
-    .then(dbWorkout => {
-        res.json(dbWorkout);
+  db.workout
+    .insertMany(body)
+    .then((dbWorkout) => {
+      res.json(dbWorkout);
     })
-    .catch(err => {
-        res.status(400).json(err);
+    .catch((err) => {
+      res.status(400).json(err);
     });
 });
 
-// router.get("/api/workouts", (req, res) => {
-//     db.find({})
-// })
+router.get("/api/workouts", (req, res) => {
+  db.workout
+    .find({})
+    .sort({ date: -1 })
+    .then((dbWorkout) => {
+      res.json(dbWorkout);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
+
 module.exports = router;
