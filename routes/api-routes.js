@@ -1,44 +1,63 @@
+const mongoose = require("mongoose");
+const db = require("../models");
 const router = require("express").Router();
-//const mongoose = require("mongoose");
-const db = require("../models/index");
 
-// mongoose.connect("mongodb://localhost/workout", {
-//   useNewUrlParser: true,
-//   useFindAndModify: false,
-// });
-
-router.post("/api/workouts", ({ body }, res) => {
-  db.workout
-    .create(body)
+router.get("/api/workouts/range", (req, res) => {
+  db.Workout.find({})
     .then((dbWorkout) => {
       res.json(dbWorkout);
     })
     .catch((err) => {
-      res.status(400).json(err);
-    });
-});
-
-router.post("/api/workouts/bulk", ({ body }, res) => {
-  db.workout
-    .insertMany(body)
-    .then((dbWorkout) => {
-      res.json(dbWorkout);
-    })
-    .catch((err) => {
-      res.status(400).json(err);
+      res.json(err);
     });
 });
 
 router.get("/api/workouts", (req, res) => {
-  db.workout
-    .find({})
-    .sort({ date: -1 })
+  db.Workout.find({})
+    .sort({ day: -1 })
+    .limit(1)
     .then((dbWorkout) => {
       res.json(dbWorkout);
     })
     .catch((err) => {
       res.status(400).json(err);
     });
+});
+
+router.post("/api/workouts", (req, res) => {
+  db.Workout.create(req.body, (error, data) => {
+    if (error) {
+      res.send(error);
+    } else {
+      res.send(data);
+    }
+  });
+});
+
+// router.post("/api/workouts/bulk", (req, res) => {
+//   db.Workout.insertMany({})
+//     .then(dbWorkout => {
+//       res.json(dbWorkout);
+//     })
+//     .catch(err => {
+//       res.status(400).json(err);
+//     });
+// });
+
+router.put("/api/workouts/:id", (req, res) => {
+  db.Workout.updateOne(
+    { _id: req.params.id },
+    { $push: { exercises: req.body } },
+    (error, edited) => {
+      if (error) {
+        console.log(error);
+        res.send(error);
+      } else {
+        console.log(edited);
+        res.send(edited);
+      }
+    }
+  );
 });
 
 module.exports = router;
