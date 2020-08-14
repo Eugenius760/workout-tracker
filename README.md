@@ -2,6 +2,7 @@
 A fitness app that will track a user workout
 
 ## Deployed
+https://serene-reaches-54791.herokuapp.com/?id=5f369868e93cc20017db3ab2
 
 ## Description
 This site is used for user wanting to take control of their health. It tracks and charts their workouts, giving them data on improvements and where they can use more work.
